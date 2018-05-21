@@ -22,7 +22,7 @@ PREFIX ?= /usr/local
 DESTDIR ?=
 
 .PHONY: all
-all: fxload
+all: fxload testusb test.sh
 
 fxload: CFLAGS+=-I/usr/include/libusb-1.0
 fxload: ezusb.o
@@ -32,15 +32,23 @@ ezusb.c: ezusb.h
 fxload.c ezusb.h ezusb.c:
 	wget https://raw.githubusercontent.com/libusb/libusb/master/examples/$@
 
-%: override LDLIBS+=-lusb-1.0
+fxload: override LDLIBS+=-lusb-1.0
+
+testusb: override LDLIBS+=-lpthread
+testusb: testusb.c
+
+test.sh testusb.c:
+	wget www.linux-usb.org/usbtest/$@
 
 .PHONY: install
 install:
 	install -d $(DESTDIR)$(PREFIX)/bin/
 	install -m 755 fxload $(DESTDIR)$(PREFIX)/bin/
+	install -m 755 testusb $(DESTDIR)$(PREFIX)/bin/
+	install -m 755 test.sh $(DESTDIR)$(PREFIX)/bin/testusb.sh
 
 .PHONY: clean
 clean:
-	rm -f fxload* ezusb*
+	rm -f fxload* ezusb* test*
 
 # ex: filetype=makefile
