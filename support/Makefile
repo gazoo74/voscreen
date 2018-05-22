@@ -21,25 +21,13 @@
 PREFIX ?= /usr/local
 DESTDIR ?=
 
-.NOTPARALLEL:
-
 .PHONY: all
 all:
 
-.PHONY: clean
-clean:
-	$(MAKE) -C 3rd-part $@
-
-.PHONY: 3rd-part support
-3rd-part support:
-	$(MAKE) -C $@
-
-3rd-part_all 3rd-part_clean 3rd-part_install:
-3rd-part_%:
-	$(MAKE) -C 3rd-part $*
-
-support_install:
-support_%:
-	$(MAKE) -C support $*
+.PHONY: install
+install:
+	install -d $(DESTDIR)/etc/udev/rules.d/
+	install -m 644 udev.rules \
+	        $(DESTDIR)/etc/udev/rules.d/60-vocore-screen.rules
 
 # ex: filetype=makefile
