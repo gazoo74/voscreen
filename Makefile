@@ -24,7 +24,7 @@ DESTDIR ?=
 .NOTPARALLEL:
 
 .PHONY: all
-all:
+all: 3rd-part
 
 .PHONY: clean
 clean:
